@@ -1,0 +1,7 @@
+name: 'Convert Markdown to PDF'
+description: 'Github action that generates a PDF file from a Markdown file.'
+author: 'André Rocco'
+
+runs:
+  using: 'node16'
+  main: 'index.js'
