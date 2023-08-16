@@ -62,8 +62,8 @@ async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
         await page.addStyleTag({ content: css });
     }
 
-    // Screenshot
-    await page.screenshot({ path: file.pdfOutputFile.replace('.pdf', '.png') });
+    // Wait for webfont to load
+    await page.evaluateHandle('document.fonts.ready');
 
     await page.pdf({
         ...options,

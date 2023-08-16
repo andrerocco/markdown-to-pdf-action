@@ -1,8 +1,8 @@
-/* @font-face {
+@font-face {
     font-family: 'San Francisco';
     font-weight: 400;
     src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff');
-} */
+}
 
 @page {
     size: a4;
@@ -10,7 +10,7 @@
 }
 
 body {
-    font-family: 'Segoe UI';
+    font-family: 'San Francisco', 'Segoe UI';
 
     /* system-ui,
     -apple-system,

@@ -48,6 +48,7 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
 
 convertHtmlToPdf({
     htmlFile: 'test-files/test.html',
+    cssFile: 'test-files/page.css',
     pdfOutputFile: 'test-files/test.pdf',
 });
 
