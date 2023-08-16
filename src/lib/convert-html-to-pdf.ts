@@ -46,16 +46,25 @@ async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
     }
 
     // Initialize Puppeteer's browser
-    const browser = await puppeteer.launch({ headless: 'new' });
+    const browser = await puppeteer.launch({ headless: 'new', args: ['--font-render-hinting=none'] });
     const page = await browser.newPage();
+    await page.setUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
+    );
 
-    // Read HTML and CSS files
+    // Read HTML file
     const html = fs.readFileSync(file.htmlFile, 'utf8');
-    const css = fs.readFileSync(file.cssFile, 'utf8');
 
     // Convert HTML to PDF
     await page.setContent(html);
-    await page.addStyleTag({ content: css });
+    if (file.cssFile) {
+        const css = fs.readFileSync(file.cssFile, 'utf8');
+        await page.addStyleTag({ content: css });
+    }
+
+    // Screenshot
+    await page.screenshot({ path: file.pdfOutputFile.replace('.pdf', '.png') });
+
     await page.pdf({
         ...options,
         path: file.pdfOutputFile,
@@ -69,12 +78,8 @@ async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
                   right: '1cm',
               },
     });
-}
 
-convertHtmlToPdf({
-    htmlFile: 'index.html',
-    cssFile: 'index.css',
-    pdfOutputFile: 'index.pdf',
-});
+    console.log(`Finished converting HTML file ('${file.htmlFile}') to PDF file ('${file.pdfOutputFile}')`);
+}
 
 export { convertHtmlToPdf };

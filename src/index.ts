@@ -1,31 +1,7 @@
+import { IInput, IConfig, IMergedConfig } from './interfaces/markdown-to-pdf.interfaces';
+import { convertHtmlToPdf } from './lib/convert-html-to-pdf';
+
 const path = require('path');
-
-interface IInput {
-    /*
-     * Path to the markdown file
-     */
-    path: string;
-}
-
-interface IConfig {
-    /*
-     * Path (not including file name) to the output PDF file (example: ./output/)
-     * Default: Same path as the input file
-     */
-    outputPath?: string;
-    /*
-     * Name of the output PDF file (example: my-file.pdf)
-     * Default: Same name as the input file
-     */
-    outputFilename?: string;
-}
-
-interface IMergedConfig extends IConfig {
-    /*
-     * Path to the output PDF file (example: ./output/my-file.pdf)
-     */
-    outputFile?: string;
-}
 
 /*
  * Entry point function - Runs the markdown to PDF routine
@@ -43,11 +19,12 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     }
     if (!config.outputPath) {
         // If outputPath is not defined, set it to the same path as the input file
-        const inputDir = path.dirname(input.path); // Get the directory of the input file
+        const inputDir = path.dirname(input.path);
         config.outputPath = inputDir;
     } else {
         // If outputPath is defined, make sure it is valid
-        config.outputPath = path.normalize(config.outputPath); // Normalize the output path
+        // Normalize allows multi-platform support (example: Windows uses / and Unix uses \)
+        config.outputPath = path.normalize(config.outputPath);
     }
 
     // Generates the mergedConfig object from the input config and the default config
@@ -67,7 +44,12 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     // await htmlToPdf(html, props.destination);
 }
 
-convertMarkdownToPdf({ path: './teste.md' });
+/* convertMarkdownToPdf({ path: './teste.md' }); */
+
+convertHtmlToPdf({
+    htmlFile: 'test-files/test.html',
+    pdfOutputFile: 'test-files/test.pdf',
+});
 
 /* const fs = require('fs');
 const { marked } = require('marked');
