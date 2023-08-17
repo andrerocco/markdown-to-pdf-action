@@ -37,6 +37,8 @@ interface IOptions {
  * Converts an HTML file (possibly styled by an external CSS file) to a PDF file
  */
 async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
+    const startTime = process.cpuUsage();
+
     // Validate pdf path and filename
     const normalizedPath = path.normalize(file.pdfOutputFile);
     const filename = path.basename(normalizedPath);
@@ -48,14 +50,9 @@ async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
     // Initialize Puppeteer's browser
     const browser = await puppeteer.launch({ headless: 'new', args: ['--font-render-hinting=none'] });
     const page = await browser.newPage();
-    await page.setUserAgent(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36',
-    );
 
-    // Read HTML file
+    // Read HTML and CSS (if specified) files
     const html = fs.readFileSync(file.htmlFile, 'utf8');
-
-    // Convert HTML to PDF
     await page.setContent(html);
     if (file.cssFile) {
         const css = fs.readFileSync(file.cssFile, 'utf8');
@@ -65,6 +62,7 @@ async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
     // Wait for webfont to load
     await page.evaluateHandle('document.fonts.ready');
 
+    // Convert HTML to PDF
     await page.pdf({
         ...options,
         path: file.pdfOutputFile,
@@ -79,7 +77,15 @@ async function convertHtmlToPdf(file: IFiles, options?: IOptions) {
               },
     });
 
-    console.log(`Finished converting HTML file ('${file.htmlFile}') to PDF file ('${file.pdfOutputFile}')`);
+    // Close Puppeteer's browser
+    await browser.close();
+
+    // Calculate elapsed time
+    const elapsedTime = process.cpuUsage(startTime).user / 1000;
+
+    console.log(
+        `Finished converting HTML file ('${file.htmlFile}') to PDF file ('${file.pdfOutputFile}') in ${elapsedTime} ms`,
+    );
 }
 
 export { convertHtmlToPdf };

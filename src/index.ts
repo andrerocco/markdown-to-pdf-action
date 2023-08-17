@@ -46,21 +46,8 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
 
 /* convertMarkdownToPdf({ path: './teste.md' }); */
 
-convertHtmlToPdf({
+/* convertHtmlToPdf({
     htmlFile: 'test-files/test.html',
     cssFile: 'test-files/page.css',
     pdfOutputFile: 'test-files/test.pdf',
-});
-
-/* const fs = require('fs');
-const { marked } = require('marked');
-
-var args = process.argv.slice(2);
-console.log(args);
-
-// Parse teste.md file  
-const markdown = fs.readFileSync('./teste.md', 'utf8');
-
-// Convert markdown to html
-const html = marked(markdown);
-console.log(html); */
+}); */
