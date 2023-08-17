@@ -1,0 +1,32 @@
+/* Title grid */
+
+.title-grid {
+    width: 100%;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: min-content min-content;
+    grid-auto-columns: fit-content(100%);
+    justify-content: space-between;
+    justify-items: center;
+    align-items: center;
+
+    margin: 12px 0 8px 0;
+    row-gap: 4px;
+}
+
+.title-grid * {
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+}
+
+.title-grid > *:nth-child(1),
+.title-grid > *:nth-child(2) {
+    justify-self: left;
+}
+
+.title-grid > *:nth-last-child(1),
+.title-grid > *:nth-last-child(2) {
+    justify-self: right;
+}

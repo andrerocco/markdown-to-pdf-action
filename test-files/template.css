@@ -1,0 +1,164 @@
+@font-face {
+    font-family: 'San Francisco';
+    font-weight: 400;
+    src: url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff');
+}
+
+@page {
+    size: a4;
+    margin: 0;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 1cm;
+
+    color: black;
+    font-family: 'San Francisco', 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+p,
+ul,
+li {
+    line-height: 1.5;
+}
+
+h1 {
+    border-bottom: 1px solid #000000;
+    text-transform: uppercase;
+    font-size: 16px;
+    padding-bottom: 2px;
+    margin-top: 24px;
+    margin-bottom: 4px;
+}
+
+h2 {
+    font-size: 16px;
+    padding: 8px 0;
+}
+
+ul {
+    margin: 4px 0;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.spaced {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Header styling */
+
+.header {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+
+    margin: 20px 0;
+}
+
+.header h1 {
+    font-size: 24px;
+    border-bottom: none;
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}
+
+.header ul {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.header ul > li:not(:last-child):after {
+    content: '•'; /* • */
+    margin-left: 10px;
+}
+
+.header ul > li {
+    white-space: pre;
+    list-style-type: none;
+}
+
+/* 
+
+h2 {
+    margin: 10px 0px;
+}
+
+h3 {
+    margin: 6px 0px;
+    margin-top: 12px;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    border-bottom: 1px solid #000000;
+    text-transform: uppercase;
+    font-size: 16px;
+    padding: 0;
+}
+
+h3 {
+    display: flex;
+    font-size: 15px;
+    padding: 0;
+    justify-content: space-between;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: black;
+}
+
+ul {
+    margin: 4px 0;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.header ul {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin: 6px auto 0px !important;
+    padding: 0;
+}
+
+.header ul > li {
+    display: inline;
+    white-space: pre;
+    list-style-type: none;
+}
+
+.header ul > li:not(:last-child) {
+    margin-right: 8px;
+}
+
+.header ul > li:not(:last-child):after {
+    content: '•';
+    margin-left: 8px;
+}
+ */
