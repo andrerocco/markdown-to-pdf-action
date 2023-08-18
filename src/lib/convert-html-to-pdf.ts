@@ -1,37 +1,9 @@
+import { IFiles, IOptions } from '@interfaces/convert-html-to-pdf.interfaces';
 import { isValidFilename } from './file-validation';
 
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
-
-interface IFiles {
-    htmlFile: string;
-    cssFile?: string;
-    // Complete path and filename of the PDF file to be generated (example: /home/user/myfile.pdf or myfile.pdf)
-    pdfOutputFile: string;
-}
-
-interface IOptions {
-    displayHeaderFooter?: boolean;
-    footerTemplate?: string;
-    headerTemplate?: string;
-    format?: 'Letter' | 'Legal' | 'Tabloid' | 'Ledger' | 'A0' | 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6';
-    height?: string | number;
-    width?: string | number;
-    landscape?: boolean;
-    margin?: {
-        top?: string | number;
-        bottom?: string | number;
-        left?: string | number;
-        right?: string | number;
-    };
-    omitBackground?: boolean;
-    pageRanges?: string;
-    preferCSSPageSize?: boolean;
-    printBackground?: boolean;
-    scale?: number;
-    timeout?: number;
-}
 
 /*
  * Converts an HTML file (possibly styled by an external CSS file) to a PDF file

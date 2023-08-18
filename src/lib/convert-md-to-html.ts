@@ -1,28 +1,52 @@
-/* export assync function markdownToHtml(markdown: string) {
-  const result = await remark().use(html).process(markdown);
-  return result.toString(); */
+import { IOptions, IWrapper } from '@interfaces/convert-md-to-html.interfaces';
 
 const fs = require('fs');
+const path = require('path');
 const { marked } = require('marked');
 
-/* var args = process.argv.slice(2);
-console.log(args); */
+const htmlWrapper = (props: IWrapper) => `
+<!DOCTYPE html>
+<html ${props?.lang && `lang="${props.lang}"`}>
+    <head>
+        <meta charset="utf-8">${props?.title ? `<title>${props.title}</title>` : ''}${
+            props?.css ? '\n' + props.css.map((css) => `<link rel="stylesheet" href="${css}">`).join('\n') : ''
+        }
+    </head>
+    <body>
+        ${props?.content}
+    </body>
+</html>
+`;
 
-// Parse teste.md file
-const markdown = fs.readFileSync('.test-files/test.md', 'utf8');
+/*
+ * Converts a Markdown file to HTML
+ */
+function convertMarkdownToHtml(markdownFile: string, options?: IOptions) {
+    const startTime = process.cpuUsage();
 
-// Convert markdown to html
-const generatedHtml = marked(markdown);
+    // Normalize allows multi-platform support (example: Windows uses / and Unix uses \)
+    const normalizedPath = path.normalize(markdownFile);
 
-/* const fs = require('fs');
-const { marked } = require('marked');
+    // Read the Markdown file
+    const markdown = fs.readFileSync(normalizedPath, 'utf8');
+    let html = marked(markdown);
 
-var args = process.argv.slice(2);
-console.log(args);
+    // Wrap HTML in a wrapper
+    html = htmlWrapper({
+        lang: options?.lang,
+        title: options?.title,
+        css: options?.css,
+        content: html,
+    });
 
-// Parse teste.md file  
-const markdown = fs.readFileSync('./teste.md', 'utf8');
+    fs.writeFileSync('test-files/test.html', html);
 
-// Convert markdown to html
-const html = marked(markdown);
-console.log(html); */
+    const elapsedTime = process.cpuUsage(startTime).user / 1000;
+    console.log(
+        `Finished converting Markdown file ('${normalizedPath}') to HTML file ('test-files/test.html') in ${elapsedTime} ms`,
+    );
+
+    return html;
+}
+
+export { convertMarkdownToHtml };

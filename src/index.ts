@@ -1,5 +1,6 @@
 import { IInput, IConfig, IMergedConfig } from './interfaces/markdown-to-pdf.interfaces';
 import { convertHtmlToPdf } from './lib/convert-html-to-pdf';
+import { convertMarkdownToHtml } from './lib/convert-md-to-html';
 
 const path = require('path');
 
@@ -10,6 +11,8 @@ const path = require('path');
  * 3. Converts HTML to PDF
  */
 async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
+    const startTime = process.cpuUsage();
+
     // Validate input
     if (!input.path) {
         throw new Error("markdownToPdf 'path' argument is required");
@@ -38,16 +41,24 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     console.log(mergedConfig);
 
     // Convert markdown to HTML
-    // const html = await markdownToHtml(props);
+    const html = await convertMarkdownToHtml(input.path, {
+        lang: 'pt-br',
+        css: ['template.css'], // TODO - Fix path
+    }); // Await the function call
 
     // Convert HTML to PDF
-    // await htmlToPdf(html, props.destination);
+    await convertHtmlToPdf({
+        htmlFile: 'test-files/test.html', // You should use the 'html' variable here
+        cssFile: 'test-files/template.css',
+        pdfOutputFile: 'test-files/test.pdf', // You might want to use 'mergedConfig.outputFile' here
+    });
+
+    const elapsedTime = process.cpuUsage(startTime).user / 1000;
+    console.log(
+        `Finished converting Markdown file ('${input.path}') to PDF file ('${mergedConfig.outputFile}') in ${elapsedTime} ms`,
+    );
 }
 
-/* convertMarkdownToPdf({ path: './teste.md' }); */
+convertMarkdownToPdf({ path: 'test-files/test.md' });
 
-/* convertHtmlToPdf({
-    htmlFile: 'test-files/test.html',
-    cssFile: 'test-files/page.css',
-    pdfOutputFile: 'test-files/test.pdf',
-}); */
+export { convertMarkdownToPdf };
