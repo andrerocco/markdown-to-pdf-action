@@ -1,10 +1,11 @@
+import { config } from 'process';
 import { IInput, IConfig, IMergedConfig } from './interfaces/markdown-to-pdf.interfaces';
 import { convertHtmlToPdf } from './lib/convert-html-to-pdf';
 import { convertMarkdownToHtml } from './lib/convert-md-to-html';
 
 const path = require('path');
 
-/*
+/**
  * Entry point function - Runs the markdown to PDF routine
  * 1. Validates input
  * 2. Converts Markdown to HTML
@@ -34,23 +35,21 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     let mergedConfig: IMergedConfig = {
         ...config,
     };
-
-    mergedConfig.outputFilename = config.outputFilename || path.basename(input.path, '.md') + '.pdf'; // Set the output filename
+    mergedConfig.outputFilename = config.outputFilename ? config.outputFilename : path.basename(input.path, '.md'); // Set the output file name
     mergedConfig.outputFile = path.join(mergedConfig.outputPath || '', mergedConfig.outputFilename); // Set the output file path
-
-    console.log(mergedConfig);
 
     // Convert markdown to HTML
     const html = await convertMarkdownToHtml(input.path, {
-        lang: 'pt-br',
-        css: ['template.css'], // TODO - Fix path
+        lang: mergedConfig?.htmlConfig?.lang,
+        title: mergedConfig?.htmlConfig?.title,
+        css: mergedConfig?.cssFiles,
     }); // Await the function call
 
     // Convert HTML to PDF
     await convertHtmlToPdf({
-        htmlFile: 'test-files/test.html', // You should use the 'html' variable here
-        cssFile: 'test-files/template.css',
-        pdfOutputFile: 'test-files/test.pdf', // You might want to use 'mergedConfig.outputFile' here
+        htmlString: html,
+        cssFiles: mergedConfig?.cssFiles,
+        pdfOutputPath: mergedConfig?.outputFile,
     });
 
     const elapsedTime = process.cpuUsage(startTime).user / 1000;
@@ -59,6 +58,19 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     );
 }
 
-convertMarkdownToPdf({ path: 'test-files/test.md' });
+convertMarkdownToPdf(
+    {
+        path: './test-files/test.md',
+    },
+    {
+        outputPath: './test-files',
+        outputFilename: 'output.pdf',
+        cssFiles: ['./test-files/template.css'],
+        htmlConfig: {
+            lang: 'en',
+            title: 'Test',
+        },
+    },
+);
 
 export { convertMarkdownToPdf };

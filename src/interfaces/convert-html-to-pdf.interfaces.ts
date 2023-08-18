@@ -1,13 +1,13 @@
 /**
  * @interface IFiles
- * @property {string} htmlFile - The path and filename of the HTML file to be converted
- * @property {string} cssFile - The path and filename of the CSS file to be used in the HTML file
+ * @property {string} html - The HTML content to be converted to PDF // TODO - Change to path OR content
+ * @property {string[]} cssFiles - The path and filename of the CSS file to be used (example:['./user/template.css', 'extra.css'] or ['template.css'])
  * @property {string} pdfOutputFile - The path and filename of the PDF file to be generated (example: /home/user/myfile.pdf or myfile.pdf)
  */
 interface IFiles {
-    htmlFile: string;
-    cssFile?: string;
-    pdfOutputFile: string;
+    htmlString: string;
+    cssFiles?: string[];
+    pdfOutputPath?: string;
 }
 
 /**
@@ -27,7 +27,7 @@ interface IFiles {
  * @property {number} scale - Scale of the webpage rendering. Defaults to 1
  * @property {number} timeout - Maximum time in milliseconds to wait for the PDF to be generated. Defaults to 30000 (30 seconds). Pass 0 to disable timeout
  */
-interface IOptions {
+interface IPdfFileConfig {
     displayHeaderFooter?: boolean;
     footerTemplate?: string;
     headerTemplate?: string;
@@ -49,4 +49,4 @@ interface IOptions {
     timeout?: number;
 }
 
-export { IFiles, IOptions };
+export { IFiles, IPdfFileConfig };
