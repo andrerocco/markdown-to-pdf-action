@@ -6,7 +6,7 @@
     "scripts": {
         "node": "ts-node ./src/index.ts",
         "start": "nodemon ./src/index.ts",
-        "build": "ncc build src/action.js -o dist",
+        "build": "ncc build src/index.ts -o dist",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {

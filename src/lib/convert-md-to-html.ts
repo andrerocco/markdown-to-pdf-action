@@ -1,8 +1,8 @@
-import { IHtmlConfig, IHtmlFileConfig, IHtmlWrapper } from '@interfaces/convert-md-to-html.interfaces';
+import { IHtmlFileConfig, IHtmlWrapper } from '@interfaces/convert-md-to-html.interfaces';
 
-const fs = require('fs');
-const path = require('path');
-const { marked } = require('marked');
+import { readFileSync, writeFileSync } from 'fs';
+import { normalize, dirname, basename, join } from 'path';
+import { marked } from 'marked';
 
 const htmlWrapper = (props: IHtmlWrapper) => `
 <!DOCTYPE html>
@@ -24,9 +24,9 @@ function verifyCssFiles(cssFiles: string | string[] | undefined) {
     let cssPaths: string[] = [];
 
     if (typeof cssFiles === 'string') {
-        cssPaths = [path.normalize(cssFiles)];
+        cssPaths = [normalize(cssFiles)];
     } else if (Array.isArray(cssFiles)) {
-        cssPaths = cssFiles.map((cssFile) => path.normalize(cssFile));
+        cssPaths = cssFiles.map((cssFile) => normalize(cssFile));
     }
 
     return cssPaths;
@@ -40,14 +40,14 @@ function convertMarkdownToHtml(markdownFile: string, options?: IHtmlFileConfig) 
     const startTime = process.cpuUsage();
 
     // Normalize allows multi-platform support (example: Windows uses / and Unix uses \)
-    const normalizedPath = path.normalize(markdownFile);
+    const normalizedPath = normalize(markdownFile);
     let cssPaths: string[] = [];
     if (options?.css) {
         cssPaths = verifyCssFiles(options?.css);
     }
 
     // Read the Markdown file
-    const markdown = fs.readFileSync(normalizedPath, 'utf8');
+    const markdown = readFileSync(normalizedPath, 'utf8');
     let html = marked(markdown);
 
     // Wrap HTML in a wrapper
@@ -60,12 +60,12 @@ function convertMarkdownToHtml(markdownFile: string, options?: IHtmlFileConfig) 
 
     let outputPath = '';
     if (options?.writeHtmlFile) {
-        let outputPath = options?.htmlOutputPath ? options.htmlOutputPath : path.dirname(normalizedPath);
+        let outputPath = options?.htmlOutputPath ? options.htmlOutputPath : dirname(normalizedPath);
         let outputFilename = options?.htmlOutputFilename
             ? options.htmlOutputFilename
-            : path.basename(normalizedPath, '.md') + '.html';
-        outputPath = path.join(outputPath, outputFilename);
-        fs.writeFileSync(outputPath, html);
+            : basename(normalizedPath, '.md') + '.html';
+        outputPath = join(outputPath, outputFilename);
+        writeFileSync(outputPath, html);
     }
 
     const elapsedTime = process.cpuUsage(startTime).user / 1000;

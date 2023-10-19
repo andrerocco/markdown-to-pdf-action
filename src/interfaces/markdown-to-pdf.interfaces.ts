@@ -11,7 +11,7 @@ interface IInput {
 
 /**
  * @interface IConfig
- * @property {string} outputPath - Path (not including file name) to the output PDF file (example: ./output/).
+ * @property {string} outputDir - Directory (not including file name) to the output PDF file (example: ./output/).
  * Defaults to the same path as the input file.
  * @property {string} outputFilename - Name of the output PDF file (example: my-file.pdf). Defaults to the same.
  * name as the input file.
@@ -24,7 +24,7 @@ interface IInput {
  * name as the input file.
  */
 interface IConfig {
-    outputPath?: string;
+    outputDir?: string;
     outputFilename?: string;
     cssFiles?: string[];
     generateHtml?: boolean;

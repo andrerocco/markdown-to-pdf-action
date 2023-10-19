@@ -10,6 +10,8 @@ const path = require('path');
  * 1. Validates input
  * 2. Converts Markdown to HTML
  * 3. Converts HTML to PDF
+ * @param {IInput} input - Input object
+ * @param {IConfig} config - Configuration object
  */
 async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     const startTime = process.cpuUsage();
@@ -21,14 +23,14 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     if (!input.path.endsWith('.md')) {
         throw new Error("markdownToPdf 'path' argument must be a .md file");
     }
-    if (!config.outputPath) {
-        // If outputPath is not defined, set it to the same path as the input file
+    if (!config.outputDir) {
+        // If outputDir is not defined, set it to the same path as the input file
         const inputDir = path.dirname(input.path);
-        config.outputPath = inputDir;
+        config.outputDir = inputDir;
     } else {
-        // If outputPath is defined, make sure it is valid
+        // If outputDir is defined, make sure it is valid
         // Normalize allows multi-platform support (example: Windows uses / and Unix uses \)
-        config.outputPath = path.normalize(config.outputPath);
+        config.outputDir = path.normalize(config.outputDir);
     }
 
     // Generates the mergedConfig object from the input config and the default config
@@ -36,7 +38,7 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
         ...config,
     };
     mergedConfig.outputFilename = config.outputFilename ? config.outputFilename : path.basename(input.path, '.md'); // Set the output file name
-    mergedConfig.outputFile = path.join(mergedConfig.outputPath || '', mergedConfig.outputFilename); // Set the output file path
+    mergedConfig.outputFile = path.join(mergedConfig.outputDir || '', mergedConfig.outputFilename); // Set the output file path
 
     // Convert markdown to HTML
     const html = await convertMarkdownToHtml(input.path, {
@@ -58,19 +60,19 @@ async function convertMarkdownToPdf(input: IInput, config: IConfig = {}) {
     );
 }
 
-convertMarkdownToPdf(
-    {
-        path: './test-files/test.md',
-    },
-    {
-        outputPath: './test-files',
-        outputFilename: 'output.pdf',
-        cssFiles: ['./test-files/template.css'],
-        htmlConfig: {
-            lang: 'en',
-            title: 'Test',
-        },
-    },
-);
+// convertMarkdownToPdf(
+//     {
+//         path: './test-files/test.md',
+//     },
+//     {
+//         outputDir: './test-files',
+//         outputFilename: 'output.pdf',
+//         cssFiles: ['./test-files/template.css'],
+//         htmlConfig: {
+//             lang: 'en',
+//             title: 'Test',
+//         },
+//     },
+// );
 
 export { convertMarkdownToPdf };
