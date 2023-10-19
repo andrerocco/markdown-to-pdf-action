@@ -1,28 +1,35 @@
 name: Markdown to PDF conversion
 
 on:
-    push:
-        branches: [main]
+  push:
 
 jobs:
-    markdown-to-pdf:
-        runs-on: ubuntu-latest
+  markdown-to-pdf:
+    runs-on: ubuntu-latest
 
-        name: Convert Markdown to PDF
-        steps:
-            # To use this repository's private action,
-            # you must check out the repository
-            - name: Checkout
-              uses: actions/checkout@v4
+    name: Convert Markdown to PDF
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Run Markdown to PDF
-              uses: ./ # Uses an action in the root directory
-              # TODO - Replace with andre-rocco/markdown-to-pdf@v1 when published to the marketplace
-              id: markdown-to-pdf
-              with:
-                  markdown_path: 'README.md'
-                  output_dir: 'output'
-                  output_filename: 'README.pdf'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+            node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Markdown to PDF
+        uses: ./ # Uses an action in the root directory
+        # TODO - Replace with andre-rocco/markdown-to-pdf@v1 when published to the marketplace
+        id: markdown-to-pdf
+        with:
+          markdown_path: 'README.md'
+          output_dir: 'output'
+          output_filename: 'README.pdf'
 # jobs:
 #   build:
 #     runs-on: ubuntu-latest
