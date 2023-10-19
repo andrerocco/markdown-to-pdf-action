@@ -1,12 +1,25 @@
 name: 'Convert Markdown to PDF'
-description: 'Github action that generates a PDF file from a Markdown file.'
+description: 'Github action that generates a PDF file from a Markdown file. The Markdown can be styled using CSS.'
 author: 'André Rocco'
 
 inputs:
-  GITHUB_TOKEN:
-    description: 'Github token'
-    required: true
+    # GITHUB_TOKEN:
+    #     description: 'Github token'
+    #     required: true
+
+    markdown_path:
+        description: 'Path (including filename) to the Markdown file'
+        required: true
+    output_dir:
+        description: 'Path to the output directory (default: current directory)'
+        required: false
+    output_filename:
+        description: 'Filename of the output PDF file (default: same as input file)'
+        required: false
+    css_path:
+        description: 'Path (including filename) to the CSS file'
+        required: false
 
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+    using: 'node18'
+    main: 'dist/index.js'
