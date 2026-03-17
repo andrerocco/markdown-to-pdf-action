@@ -365,19 +365,6 @@ function gatherCssPaths({
             ensureInWorkspace(candidate, workspace, "frontmatter css");
             cssSet.add(candidate);
         }
-    } else {
-        const directoryEntries = fs.readdirSync(path.dirname(markdownPath), {
-            withFileTypes: true,
-        });
-        for (const entry of directoryEntries) {
-            if (entry.isFile() && entry.name.toLowerCase().endsWith(".css")) {
-                const candidate = path.join(
-                    path.dirname(markdownPath),
-                    entry.name
-                );
-                cssSet.add(candidate);
-            }
-        }
     }
 
     return Array.from(cssSet);

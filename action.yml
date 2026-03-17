@@ -26,13 +26,16 @@ inputs:
     generate_html:
         description: "Set to 'false' to skip writing HTML files and only emit PDFs."
         required: false
-        default: "true"
+        default: "false"
     fail_on_missing_css:
         description: "Fail if no CSS files are found for a Markdown file (defaults to warning only)."
         required: false
         default: "false"
     disable_sandbox:
         description: "Disable Chrome sandbox (recommended on Linux runners)."
+        required: false
+    upload_artifact:
+        description: "Upload the generated files as a workflow artifact."
         required: false
         default: "true"
     pdf_timeout_ms:
@@ -51,6 +54,7 @@ runs:
     using: "composite"
     steps:
         - name: Convert Markdown files to PDF
+          id: convert_markdown_to_pdf
           run: node ${{ github.action_path }}/dist/index.js
           shell: bash
           env:
@@ -59,15 +63,27 @@ runs:
               INPUT_OUTPUT_DIR: ${{ inputs.output_dir }}
               INPUT_CHROME_PATH: ${{ inputs.chrome_path }}
               INPUT_GLOBAL_CSS: ${{ inputs.global_css }}
-              INPUT_EMIT_HTML: ${{ inputs.emit_html }}
+              INPUT_GENERATE_HTML: ${{ inputs.generate_html }}
               INPUT_FAIL_ON_MISSING_CSS: ${{ inputs.fail_on_missing_css }}
               INPUT_DISABLE_SANDBOX: ${{ inputs.disable_sandbox }}
               INPUT_PDF_TIMEOUT_MS: ${{ inputs.pdf_timeout_ms }}
               INPUT_EXTRA_HTML_HEAD: ${{ inputs.extra_html_head }}
 
         - name: Upload generated artifacts
+          if: ${{ inputs.upload_artifact == 'true' }}
           uses: actions/upload-artifact@v4
           with:
               name: ${{ inputs.artifact_name }}
               path: ${{ inputs.output_dir }}
               if-no-files-found: error
+
+outputs:
+    count:
+        description: "Number of Markdown files that were rendered."
+        value: ${{ steps.convert.outputs.count }}
+    output_dir:
+        description: "Relative path to the directory containing generated files."
+        value: ${{ steps.convert.outputs.output_dir }}
+    files:
+        description: "JSON array describing each rendered file (markdown, pdf, html, css)."
+        value: ${{ steps.convert.outputs.files }}

@@ -27,11 +27,14 @@ jobs:
                 **/node_modules/**
                 **/.git/**
                 **/.github/**
+            global_css: |
+                styles/global.css
+                styles/theme.css
             generate_html: false # Optional, defaults to false
             artifact_name: MyArtifact # Optional, defaults to "Markdown_PDFs_Converted"
 ```
 
-All Markdown files matching the specified glob patterns will be converted to PDFs using the (one or many) CSS files **located in the _same_ folder** on each push or pull request.
+All Markdown files matching the specified glob patterns will be converted to PDFs using the CSS files matched by the `global_css` input and/or any per-file front matter `css` entries.
 
 ### Front matter options
 
@@ -49,5 +52,5 @@ css:
 
 - `title`: Sets the output filename (**without extension**). If `generate_html` is enabled, it also sets the HTML `<title>`.
 - `lang`: Sets the `<html lang="...">` attribute.
-- `css`: Relative paths (from the Markdown file) to include specific CSS files. When omitted, every `.css` file in the same folder is included by default.
+- `css`: Relative paths (from the Markdown file) to include specific CSS files. When omitted, only the workflow `global_css` input (if any) is applied.
 - `draft` / `skip`: Set to `true` to skip rendering that Markdown file. Alternatively set `publish: false`.

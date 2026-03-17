@@ -35,7 +35,7 @@ The script writes HTML (when enabled) and PDF files into `ci-output`. The struct
 - `INPUT_EXCLUDE`: Optional glob patterns to ignore. Combine multiple patterns with newlines.
 - `INPUT_OUTPUT_DIR`: Target directory for generated files (relative to the workspace). Defaults to `output`.
 - `INPUT_GLOBAL_CSS`: Newline-separated glob patterns for CSS files bundled with every resume.
-- `INPUT_EMIT_HTML`: Set to `false` to skip writing HTML files and emit PDFs only. Defaults to `true`.
+- `INPUT_GENERATE_HTML`: Set to `true` to emit HTML files alongside PDFs. Defaults to `false`.
 - `INPUT_INCLUDE_README`: Set to `true` to process `README.md` files. Defaults to `false`.
 - `INPUT_FAIL_ON_MISSING_CSS`: Set to `true` to treat missing CSS as an error rather than a warning. Defaults to `false`.
 - `INPUT_DISABLE_SANDBOX`: Set to `false` to keep the Chrome sandbox enabled. Defaults to `true` (recommended for Linux containers).
@@ -82,7 +82,7 @@ jobs:
                   # output_dir: custom_output
                   # chrome_path: /usr/bin/google-chrome
                   # global_css: theme.css
-                  # emit_html: false
+                  # generate_html: false
                   # fail_on_missing_css: true
                   # disable_sandbox: false
                   # pdf_timeout_ms: 30000
