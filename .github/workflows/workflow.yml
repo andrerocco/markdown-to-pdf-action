@@ -30,7 +30,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Generate PDFs and HTML
-              uses: resu-md/resumd-action@main
+              uses: andrerocco/resumd-action@main
               with:
                   files: ${{ inputs.files }}
                   exclude: ${{ inputs.exclude }}
