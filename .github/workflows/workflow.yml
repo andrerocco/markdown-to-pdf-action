@@ -12,6 +12,10 @@ on:
                 description: "Newline-separated glob patterns to exclude from the search."
                 required: false
                 type: string
+            global_css:
+                description: "Newline-separated glob patterns for CSS files that should be included with every document."
+                required: false
+                type: string
             generate_html:
                 description: "Set to 'true' to also emit HTML files."
                 required: false
@@ -36,5 +40,6 @@ jobs:
               with:
                   files: ${{ inputs.files }}
                   exclude: ${{ inputs.exclude }}
+                  global_css: ${{ inputs.global_css }}
                   generate_html: ${{ inputs.generate_html }}
                   artifact_name: ${{ inputs.artifact_name }}
